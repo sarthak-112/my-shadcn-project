@@ -78,7 +78,7 @@ const Contact = () => {
               Get in Touch
             </h1>
             <p className="text-xl text-neutral-500">
-              We'd love to hear from you. Let's discuss your project.
+              We&apos;d love to hear from you. Let&apos;s discuss your project.
             </p>
           </div>
         </div>
