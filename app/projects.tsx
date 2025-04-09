@@ -4,8 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
-import { cn } from "@/lib/utils";
 import Navbar from "./navbar";
 
 interface Project {
@@ -202,7 +200,7 @@ const ReviewCard = ({
                 Our Projects
               </h1>
               <p className="text-xl text-neutral-500">
-                Discover our latest work and see how we've helped our clients achieve their goals
+                Discover our latest work and see how we&apos;ve helped our clients achieve their goals
               </p>
             </div>
           </div>

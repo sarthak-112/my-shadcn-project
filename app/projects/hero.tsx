@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -15,18 +15,9 @@ type CategoryId =
   | "research"
   | "analytics";
 
-interface TabCounts {
-  projects: number;
-  clients: number;
-}
-
 interface CategoryCount {
   projects: number;
   clients: number;
-}
-
-interface CategoryCounts {
-  [key: string]: CategoryCount;
 }
 
 interface Project {
@@ -254,7 +245,7 @@ const Hero = () => {
     },
   ];
 
-  const tabCounts = React.useMemo(() => {
+  const tabCounts = useMemo(() => {
     const projectCount = projects.length;
     const clientCount = clients.length;
 
@@ -300,7 +291,7 @@ const Hero = () => {
       },
       categoryCounts: categoryCount,
     };
-  }, []);
+  }, [projects, clients]);
 
   const tabs = [
     { id: "projects" as const, name: "Projects", count: tabCounts.tabCounts.projects },
