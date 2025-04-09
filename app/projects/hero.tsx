@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 type TabId = "projects" | "clients";
@@ -348,7 +348,69 @@ const Hero = () => {
 
   const renderContent = () => {
     return (
-      <AnimatePresence mode="wait">
+      <div
+        className={`
+          md:mx-auto   
+          2xl:w-4/5 md:px-16
+          px-6 py-40
+          ${activeTab === 'projects' ? 'bg-white' : 'bg-black'}
+        `}
+      >
+        {/* Main Navigation */}
+        <div className="flex flex-wrap gap-8 mb-12 items-center">
+          {tabs.map((tab, index) => (
+            <React.Fragment key={tab.id}>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`text-2xl md:text-4xl font-bold ${
+                  activeTab === tab.id
+                    ? activeTab === 'projects' 
+                      ? "border-b-2 border-black text-black"
+                      : "border-b-2 border-white text-white"
+                    : activeTab === 'projects'
+                      ? "text-gray-600"
+                      : "text-gray-400"
+                }`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.name}
+                <span className="text-sm ml-1 align-super">{tab.count}</span>
+              </motion.button>
+              {index < tabs.length - 1 && (
+                <div className={`p-2 rounded-full ${activeTab === 'projects' ? 'bg-black' : 'bg-white'} h-4 w-4 items-center flex justify-center`}></div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Categories */}
+        <div className="flex flex-wrap gap-6 mb-12">
+          {categories.map((category) => (
+            <motion.button
+              key={category.id}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-4 py-2 ${
+                activeCategory === category.id 
+                  ? activeTab === 'projects' 
+                    ? "font-bold text-black" 
+                    : "font-bold text-white"
+                  : activeTab === 'projects'
+                    ? "text-gray-500"
+                    : "text-gray-400"
+              }`}
+              onClick={() => setActiveCategory(category.id)}
+            >
+              {category.name}
+              <span className={`text-xs ml-1 align-super ${activeTab === 'projects' ? 'text-gray-500' : 'text-gray-400'}`}>
+                {category.count}
+              </span>
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Content */}
         {activeTab === "clients" ? (
           <motion.div
             layout
@@ -359,40 +421,30 @@ const Hero = () => {
             transition={{ duration: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-12 gap-10"
           >
-            <AnimatePresence>
-              {clients
-                .filter(
-                  (client) =>
-                    activeCategory === "all" ||
-                    client.category === activeCategory
-                )
-                .map((client) => (
-                  <motion.div
-                    layout
-                    key={client.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="col-span-4 mb-12 md:mb-0 border border-gray-200 p-4 bg-white rounded-lg hover:shadow-lg transition-shadow"
-                  >
-                    <div className="relative h-32 mb-6">
-                      <Image
-                        priority
-                        height={100}
-                        width={100}
-                        src={`/${client.image}`}
-                        alt={client.name}
-                        className="object-contain w-full h-full"
-                      />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4 text-black">{client.name}</h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {client.description}
-                    </p>
-                  </motion.div>
-                ))}
-            </AnimatePresence>
+            <motion.div
+              layout
+              key="clients"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="col-span-4 mb-12 md:mb-0 border border-gray-200 p-4 bg-white rounded-lg hover:shadow-lg transition-shadow"
+            >
+              <div className="relative h-32 mb-6">
+                <Image
+                  priority
+                  height={100}
+                  width={100}
+                  src={`/${clients[0].image}`}
+                  alt={clients[0].name}
+                  className="object-contain w-full h-full"
+                />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-black">{clients[0].name}</h3>
+              <p className="text-gray-600 leading-relaxed">
+                {clients[0].description}
+              </p>
+            </motion.div>
           </motion.div>
         ) : (
           <motion.div
@@ -404,115 +456,39 @@ const Hero = () => {
             transition={{ duration: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-12 gap-y-10 md:gap-x-10"
           >
-            <AnimatePresence>
-              {projects
-                .filter(
-                  (project) =>
-                    activeCategory === "all" ||
-                    project.category === activeCategory
-                )
-                .map((project) => (
-                  <motion.div
-                    layout
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className={`${project.size} bg-black rounded-lg p-4 hover:shadow-lg transition-shadow`}
-                  >
-                    <div className={`relative ${project.imageHeight} mb-4`}>
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-full object-cover rounded-lg"
-                      >
-                        <source src={project.video} type="video/mp4" />
-                      </video>
-                    </div>
-                    <h3 className="text-sm font-bold mb-2 text-gray-400">
-                      / {project.name}
-                    </h3>
-                    <h3 className="text-xl font-bold mb-2 text-white">{project.title}</h3>
-                    <p className="text-gray-400">{project.description}</p>
-                  </motion.div>
-                ))}
-            </AnimatePresence>
+            <motion.div
+              layout
+              key="projects"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className={`${projects[0].size} bg-black rounded-lg p-4 hover:shadow-lg transition-shadow`}
+            >
+              <div className={`relative ${projects[0].imageHeight} mb-4`}>
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover rounded-lg"
+                >
+                  <source src={projects[0].video} type="video/mp4" />
+                </video>
+              </div>
+              <h3 className="text-sm font-bold mb-2 text-gray-400">
+                / {projects[0].name}
+              </h3>
+              <h3 className="text-xl font-bold mb-2 text-white">{projects[0].title}</h3>
+              <p className="text-gray-400">{projects[0].description}</p>
+            </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </div>
     );
   };
 
-  return (
-    <div
-      className={`
-        md:mx-auto   
-        2xl:w-4/5 md:px-16
-        px-6 py-40
-        ${activeTab === 'projects' ? 'bg-white' : 'bg-black'}
-      `}
-    >
-      {/* Main Navigation */}
-      <div className="flex flex-wrap gap-8 mb-12 items-center">
-        {tabs.map((tab, index) => (
-          <React.Fragment key={tab.id}>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`text-2xl md:text-4xl font-bold ${
-                activeTab === tab.id
-                  ? activeTab === 'projects' 
-                    ? "border-b-2 border-black text-black"
-                    : "border-b-2 border-white text-white"
-                  : activeTab === 'projects'
-                    ? "text-gray-600"
-                    : "text-gray-400"
-              }`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.name}
-              <span className="text-sm ml-1 align-super">{tab.count}</span>
-            </motion.button>
-            {index < tabs.length - 1 && (
-              <div className={`p-2 rounded-full ${activeTab === 'projects' ? 'bg-black' : 'bg-white'} h-4 w-4 items-center flex justify-center`}></div>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
-
-      {/* Categories */}
-      <div className="flex flex-wrap gap-6 mb-12">
-        {categories.map((category) => (
-          <motion.button
-            key={category.id}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className={`px-4 py-2 ${
-              activeCategory === category.id 
-                ? activeTab === 'projects' 
-                  ? "font-bold text-black" 
-                  : "font-bold text-white"
-                : activeTab === 'projects'
-                  ? "text-gray-500"
-                  : "text-gray-400"
-            }`}
-            onClick={() => setActiveCategory(category.id)}
-          >
-            {category.name}
-            <span className={`text-xs ml-1 align-super ${activeTab === 'projects' ? 'text-gray-500' : 'text-gray-400'}`}>
-              {category.count}
-            </span>
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Content */}
-      {renderContent()}
-    </div>
-  );
+  return renderContent();
 };
 
 export default Hero;
