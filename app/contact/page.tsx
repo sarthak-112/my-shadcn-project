@@ -58,10 +58,10 @@ const Contact = () => {
         message: 'Message sent successfully! We will get back to you soon.'
       });
       setFormData({ name: '', email: '', subject: '', message: '' });
-    } catch (error: any) {
+    } catch (error) {
       setStatus({
         type: 'error',
-        message: error.message || 'Failed to send message. Please try again.'
+        message: error instanceof Error ? error.message : 'Failed to send message. Please try again.'
       });
     } finally {
       setIsSubmitting(false);

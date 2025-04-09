@@ -254,12 +254,15 @@ const Hero = () => {
     },
   ];
 
-  const { tabCounts, categoryCounts } = useMemo(() => {
+  const tabCounts = React.useMemo(() => {
     const projectCount = projects.length;
     const clientCount = clients.length;
 
-    const categoryCount: CategoryCounts = {
-      all: { projects: projectCount, clients: clientCount },
+    const categoryCount: Record<string, CategoryCount> = {
+      all: {
+        projects: projectCount,
+        clients: clientCount,
+      },
       branding: {
         projects: projects.filter((p) => p.category === "branding").length,
         clients: clients.filter((c) => c.category === "branding").length,
@@ -294,52 +297,52 @@ const Hero = () => {
       tabCounts: {
         projects: projectCount,
         clients: clientCount,
-      } as TabCounts,
+      },
       categoryCounts: categoryCount,
     };
   }, []);
 
   const tabs = [
-    { id: "projects" as const, name: "Projects", count: tabCounts.projects },
-    { id: "clients" as const, name: "Clients", count: tabCounts.clients },
+    { id: "projects" as const, name: "Projects", count: tabCounts.tabCounts.projects },
+    { id: "clients" as const, name: "Clients", count: tabCounts.tabCounts.clients },
   ];
 
   const categories = [
-    { id: "all" as const, name: "All", count: categoryCounts.all[activeTab] },
+    { id: "all" as const, name: "All", count: tabCounts.categoryCounts.all[activeTab] },
     {
       id: "branding" as const,
       name: "Branding",
-      count: categoryCounts.branding[activeTab],
+      count: tabCounts.categoryCounts.branding[activeTab],
     },
     {
       id: "uxui" as const,
       name: "UX/UI",
-      count: categoryCounts.uxui[activeTab],
+      count: tabCounts.categoryCounts.uxui[activeTab],
     },
     {
       id: "development" as const,
       name: "Development",
-      count: categoryCounts.development[activeTab],
+      count: tabCounts.categoryCounts.development[activeTab],
     },
     {
       id: "strategy" as const,
       name: "Strategy",
-      count: categoryCounts.strategy[activeTab],
+      count: tabCounts.categoryCounts.strategy[activeTab],
     },
     {
       id: "marketing" as const,
       name: "Marketing",
-      count: categoryCounts.marketing[activeTab],
+      count: tabCounts.categoryCounts.marketing[activeTab],
     },
     {
       id: "research" as const,
       name: "Research",
-      count: categoryCounts.research[activeTab],
+      count: tabCounts.categoryCounts.research[activeTab],
     },
     {
       id: "analytics" as const,
       name: "Analytics",
-      count: categoryCounts.analytics[activeTab],
+      count: tabCounts.categoryCounts.analytics[activeTab],
     },
   ];
 

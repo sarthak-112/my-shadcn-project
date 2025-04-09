@@ -30,10 +30,11 @@ export async function POST(request: Request) {
       { message: 'Message sent successfully', contact },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Something went wrong';
     return NextResponse.json(
-      { error: error.message || 'Something went wrong' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

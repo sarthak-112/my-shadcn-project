@@ -8,7 +8,15 @@ import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 import { cn } from "@/lib/utils";
 import Navbar from "./navbar";
 
-const projects = [
+interface Project {
+  src: string;
+  name: string;
+  logo: string;
+  description: string;
+  className: string;
+}
+
+const projects: Project[] = [
     {
       src: "/adidas.svg",
       name: "Adidas",
